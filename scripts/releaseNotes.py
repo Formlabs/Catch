@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
 import os
 import re
 import urllib2
@@ -23,13 +27,13 @@ issues = {}
 def getIssueTitle( issueNumber ):
     try:
         s = urllib2.urlopen("https://api.github.com/repos/philsquared/catch/issues/" + issueNumber ).read()        
-    except e:
+    except:
         return "#HTTP Error#"
 
     try:
         j = json.loads( s )
         return j["title"]
-    except e:
+    except:
         return "#JSON Error#"
 
 for line in lines:
@@ -39,7 +43,6 @@ for line in lines:
         pass
     elif line.startswith( "Date:"):
         dates.append( line[5:].lstrip() )
-        pass
     elif line == "" and prevLine == "":
         pass
     else:
@@ -56,7 +59,7 @@ for line in lines:
         else:
             messages.append( line2 )
 
-print "All changes between {0} and {1}:\n".format( dates[-1], dates[0] )
+print("All changes between {0} and {1}:\n".format( dates[-1], dates[0] ))
 
 for line in messages:
-    print line
+    print(line)

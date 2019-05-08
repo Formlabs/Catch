@@ -8,18 +8,15 @@
 #ifndef TWOBLUECUBES_CATCH_INTERFACES_TESTCASE_H_INCLUDED
 #define TWOBLUECUBES_CATCH_INTERFACES_TESTCASE_H_INCLUDED
 
-#include "catch_ptr.hpp"
-
 #include <vector>
 
 namespace Catch {
 
     class TestSpec;
 
-    struct ITestCase : IShared {
+    struct ITestInvoker {
         virtual void invoke () const = 0;
-    protected:
-        virtual ~ITestCase();
+        virtual ~ITestInvoker();
     };
 
     class TestCase;

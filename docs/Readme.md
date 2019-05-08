@@ -1,19 +1,39 @@
-These are the currently documented areas of the framework. There is more to come.
+<a id="top"></a>
+# Reference
 
-Before looking at this material be sure to read the [tutorial](tutorial.md)
+To get the most out of Catch2, start with the [tutorial](tutorial.md#top).
+Once you're up and running consider the following reference material.
 
-* [Assertion macros](assertions.md)
-* [Logging macros](logging.md)
-* [Test cases and sections](test-cases-and-sections.md)
-* [Test fixtures](test-fixtures.md)
-* [Command line](command-line.md)
-* [Build systems](build-systems.md)
-* [Supplying your own main()](own-main.md)
-* [Configuration](configuration.md)
-* [String Conversions](tostring.md)
-* [Why are my tests slow to compile?](slow-compiles.md)
+Writing tests:
+* [Assertion macros](assertions.md#top)
+* [Matchers](matchers.md#top)
+* [Logging macros](logging.md#top)
+* [Test cases and sections](test-cases-and-sections.md#top)
+* [Test fixtures](test-fixtures.md#top)
+* [Reporters](reporters.md#top)
+* [Event Listeners](event-listeners.md#top)
+* [Data Generators](generators.md#top)
+* [Other macros](other-macros.md#top)
 
-Other
+Fine tuning:
+* [Supplying your own main()](own-main.md#top)
+* [Compile-time configuration](configuration.md#top)
+* [String Conversions](tostring.md#top)
 
-* [Why Catch?](why-catch.md)
-* [Contributing](contributing.md)
+Running:
+* [Command line](command-line.md#top)
+
+Odds and ends:
+* [CMake integration](cmake-integration.md#top)
+* [CI and other miscellaneous pieces](ci-and-misc.md#top)
+
+FAQ:
+* [Why are my tests slow to compile?](slow-compiles.md#top)
+* [Known limitations](limitations.md#top)
+ 
+Other:
+* [Why Catch?](why-catch.md#top)
+* [Open Source Projects using Catch](opensource-users.md#top)
+* [Contributing](contributing.md#top)
+* [Release Notes](release-notes.md#top)
+* [Deprecations and incoming changes](deprecations.md#top)

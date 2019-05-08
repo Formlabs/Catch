@@ -9,6 +9,7 @@
 #define TWOBLUECUBES_CATCH_TAG_ALIAS_REGISTRY_H_INCLUDED
 
 #include "catch_interfaces_tag_alias_registry.h"
+#include "catch_tag_alias.h"
 
 #include <map>
 
@@ -16,11 +17,10 @@ namespace Catch {
 
     class TagAliasRegistry : public ITagAliasRegistry {
     public:
-        virtual ~TagAliasRegistry();
-        virtual Option<TagAlias> find( std::string const& alias ) const;
-        virtual std::string expandAliases( std::string const& unexpandedTestSpec ) const;
-        void add( char const* alias, char const* tag, SourceLineInfo const& lineInfo );
-        static TagAliasRegistry& get();
+        ~TagAliasRegistry() override;
+        TagAlias const* find( std::string const& alias ) const override;
+        std::string expandAliases( std::string const& unexpandedTestSpec ) const override;
+        void add( std::string const& alias, std::string const& tag, SourceLineInfo const& lineInfo );
 
     private:
         std::map<std::string, TagAlias> m_registry;

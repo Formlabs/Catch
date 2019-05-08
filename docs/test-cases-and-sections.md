@@ -1,8 +1,15 @@
+<a id="top"></a>
 # Test cases and sections
+
+**Contents**<br>
+[Tags](#tags)<br>
+[Tag aliases](#tag-aliases)<br>
+[BDD-style test cases](#bdd-style-test-cases)<br>
+[Type parametrised test cases](#type-parametrised-test-cases)<br>
 
 While Catch fully supports the traditional, xUnit, style of class-based fixtures containing test case methods this is not the preferred style.
 
-Instead Catch provides a powerful mechanism for nesting test case sections within a test case. For a more detailed discussion see the [tutorial](tutorial.md#testCasesAndSections).
+Instead Catch provides a powerful mechanism for nesting test case sections within a test case. For a more detailed discussion see the [tutorial](tutorial.md#test-cases-and-sections).
 
 Test cases and sections are very easy to use in practice:
 
@@ -11,7 +18,7 @@ Test cases and sections are very easy to use in practice:
 
 _test name_ and _section name_ are free form, quoted, strings. The optional _tags_ argument is a quoted string containing one or more tags enclosed in square brackets. Tags are discussed below. Test names must be unique within the Catch executable.
 
-For examples see the [Tutorial](tutorial.md)
+For examples see the [Tutorial](tutorial.md#top)
 
 ## Tags
 
@@ -19,42 +26,46 @@ Tags allow an arbitrary number of additional strings to be associated with a tes
 
 As an example - given the following test cases:
 
-	TEST_CASE( "A", "[widget]" ) { /* ... */ }
-	TEST_CASE( "B", "[widget]" ) { /* ... */ }
-	TEST_CASE( "C", "[gadget]" ) { /* ... */ }
-	TEST_CASE( "D", "[widget][gadget]" ) { /* ... */ }
+    TEST_CASE( "A", "[widget]" ) { /* ... */ }
+    TEST_CASE( "B", "[widget]" ) { /* ... */ }
+    TEST_CASE( "C", "[gadget]" ) { /* ... */ }
+    TEST_CASE( "D", "[widget][gadget]" ) { /* ... */ }
 
 The tag expression, ```"[widget]"``` selects A, B & D. ```"[gadget]"``` selects C & D. ```"[widget][gadget]"``` selects just D and ```"[widget],[gadget]"``` selects all four test cases.
 
 For more detail on command line selection see [the command line docs](command-line.md#specifying-which-tests-to-run)
 
-Tag names are not case sensitive.
+Tag names are not case sensitive and can contain any ASCII characters. This means that tags `[tag with spaces]` and `[I said "good day"]` are both allowed tags and can be filtered on. Escapes are not supported however and `[\]]` is not a valid tag.
 
 ### Special Tags
 
 All tag names beginning with non-alphanumeric characters are reserved by Catch. Catch defines a number of "special" tags, which have meaning to the test runner itself. These special tags all begin with a symbol character. Following is a list of currently defined special tags and their meanings.
 
-* `[!hide]` or `[.]` (or, for legacy reasons, `[hide]`)	- causes test cases to be skipped from the default list (ie when no test cases have been explicitly selected through tag expressions or name wildcards). The hide tag is often combined with another, user, tag (for example `[.][integration]` - so all integration tests are excluded from the default run but can be run by passing `[integration]` on the command line). As a short-cut you can combine these by simply prefixing your user tag with a `.` - e.g. `[.integration]`. Because the hide tag has evolved to have several forms, all forms are added as tags if you use one of them.
+* `[!hide]` or `[.]` - causes test cases to be skipped from the default list (i.e. when no test cases have been explicitly selected through tag expressions or name wildcards). The hide tag is often combined with another, user, tag (for example `[.][integration]` - so all integration tests are excluded from the default run but can be run by passing `[integration]` on the command line). As a short-cut you can combine these by simply prefixing your user tag with a `.` - e.g. `[.integration]`. Because the hide tag has evolved to have several forms, all forms are added as tags if you use one of them.
 
-* `[!throws]`	- lets Catch know that this test is likely to throw an exception even if successful. This causes the test to be exluded when running with `-e` or `--nothrow`.
+* `[!throws]` - lets Catch know that this test is likely to throw an exception even if successful. This causes the test to be excluded when running with `-e` or `--nothrow`.
 
-* `[!shouldfail]` - reverse the failing logic of the test: if the test is successful if it fails, and vice-versa.
+* `[!mayfail]` - doesn't fail the test if any given assertion fails (but still reports it). This can be useful to flag a work-in-progress, or a known issue that you don't want to immediately fix but still want to track in your tests.
 
-* `[!mayfail]` - doesn't fail the test if any given assertion fails (but still reports it). This can be useful to flag a work-in-progress, or a known issue that you don't want to immediately fix but still want to track in the your tests.
+* `[!shouldfail]` - like `[!mayfail]` but *fails* the test if it *passes*. This can be useful if you want to be notified of accidental, or third-party, fixes.
 
-* `[#<filename>]` - running with `-#` or `--filenames-as-tags` causes Catch to add the filename, prefixed with `#` (and with any extension stripped) as a tag. e.g. tests in testfile.cpp would all be tagged `[#testfile]`.
+* `[!nonportable]` - Indicates that behaviour may vary between platforms or compilers.
+
+* `[#<filename>]` - running with `-#` or `--filenames-as-tags` causes Catch to add the filename, prefixed with `#` (and with any extension stripped), as a tag to all contained tests, e.g. tests in testfile.cpp would all be tagged `[#testfile]`.
 
 * `[@<alias>]` - tag aliases all begin with `@` (see below).
 
+* `[!benchmark]` - this test case is actually a benchmark. This is an experimental feature, and currently has no documentation. If you want to try it out, look at `projects/SelfTest/Benchmark.tests.cpp` for details.
+
 ## Tag aliases
 
-Between tag expressions and wildcarded test names (as well as combinations of the two) quite complex patterns can be constructed to direct which test cases are run. If a complex pattern is used often it is convenient to be able to create an alias for the expression. this can be done, in code, using the following form:
+Between tag expressions and wildcarded test names (as well as combinations of the two) quite complex patterns can be constructed to direct which test cases are run. If a complex pattern is used often it is convenient to be able to create an alias for the expression. This can be done, in code, using the following form:
 
-	CATCH_REGISTER_TAG_ALIAS( <alias string>, <tag expression> )
+    CATCH_REGISTER_TAG_ALIAS( <alias string>, <tag expression> )
 
-Aliases must begining with the `@` character. An example of a tag alias is:
+Aliases must begin with the `@` character. An example of a tag alias is:
 
-	CATCH_REGISTER_TAG_ALIAS( "[@nhf]", "[failing]~[.]" )
+    CATCH_REGISTER_TAG_ALIAS( "[@nhf]", "[failing]~[.]" )
 
 Now when `[@nhf]` is used on the command line this matches all tests that are tagged `[failing]`, but which are not also hidden.
 
@@ -81,6 +92,105 @@ When any of these macros are used the console reporter recognises them and forma
 
 Other than the additional prefixes and the formatting in the console reporter these macros behave exactly as ```TEST_CASE```s and ```SECTION```s. As such there is nothing enforcing the correct sequencing of these macros - that's up to the programmer!
 
+## Type parametrised test cases
+
+In addition to `TEST_CASE`s, Catch2 also supports test cases parametrised
+by types, in the form of `TEMPLATE_TEST_CASE` and
+`TEMPLATE_PRODUCT_TEST_CASE`.
+
+* **TEMPLATE_TEST_CASE(** _test name_ , _tags_,  _type1_, _type2_, ..., _typen_ **)**
+
+_test name_ and _tag_ are exactly the same as they are in `TEST_CASE`,
+with the difference that the tag string must be provided (however, it
+can be empty). _type1_ through _typen_ is the list of types for which
+this test case should run, and, inside the test code, the current type
+is available as the `TestType` type.
+
+Because of limitations of the C++ preprocessor, if you want to specify
+a type with multiple template parameters, you need to enclose it in
+parentheses, e.g. `std::map<int, std::string>` needs to be passed as
+`(std::map<int, std::string>)`.
+
+Example:
+```cpp
+TEMPLATE_TEST_CASE( "vectors can be sized and resized", "[vector][template]", int, std::string, (std::tuple<int,float>) ) {
+
+    std::vector<TestType> v( 5 );
+
+    REQUIRE( v.size() == 5 );
+    REQUIRE( v.capacity() >= 5 );
+
+    SECTION( "resizing bigger changes size and capacity" ) {
+        v.resize( 10 );
+
+        REQUIRE( v.size() == 10 );
+        REQUIRE( v.capacity() >= 10 );
+    }
+    SECTION( "resizing smaller changes size but not capacity" ) {
+        v.resize( 0 );
+
+        REQUIRE( v.size() == 0 );
+        REQUIRE( v.capacity() >= 5 );
+
+        SECTION( "We can use the 'swap trick' to reset the capacity" ) {
+            std::vector<TestType> empty;
+            empty.swap( v );
+
+            REQUIRE( v.capacity() == 0 );
+        }
+    }
+    SECTION( "reserving smaller does not change size or capacity" ) {
+        v.reserve( 0 );
+
+        REQUIRE( v.size() == 5 );
+        REQUIRE( v.capacity() >= 5 );
+    }
+}
+```
+
+* **TEMPLATE_PRODUCT_TEST_CASE(** _test name_ , _tags_, (_template-type1_, _template-type2_, ..., _template-typen_), (_template-arg1_, _template-arg2_, ..., _template-argm_) **)**
+
+_template-type1_ through _template-typen_ is list of template template
+types which should be combined with each of _template-arg1_ through
+ _template-argm_, resulting in _n * m_ test cases. Inside the test case,
+the resulting type is available under the name of `TestType`.
+
+To specify more than 1 type as a single _template-type_ or _template-arg_,
+you must enclose the types in an additional set of parentheses, e.g.
+`((int, float), (char, double))` specifies 2 template-args, each
+consisting of 2 concrete types (`int`, `float` and `char`, `double`
+respectively). You can also omit the outer set of parentheses if you
+specify only one type as the full set of either the _template-types_,
+or the _template-args_.
+
+
+Example:
+```cpp
+template< typename T>
+struct Foo {
+    size_t size() {
+        return 0;
+    }
+};
+
+TEMPLATE_PRODUCT_TEST_CASE("A Template product test case", "[template][product]", (std::vector, Foo), (int, float)) {
+    TestType x;
+    REQUIRE(x.size() == 0);
+}
+```
+
+You can also have different arities in the _template-arg_ packs:
+```cpp
+TEMPLATE_PRODUCT_TEST_CASE("Product with differing arities", "[template][product]", std::tuple, (int, (int, double), (int, double, float))) {
+    TestType x;
+    REQUIRE(std::tuple_size<TestType>::value >= 1);
+}
+```
+
+_While there is an upper limit on the number of types you can specify
+in single `TEMPLATE_TEST_CASE` or `TEMPLATE_PRODUCT_TEST_CASE`, the limit
+is very high and should not be encountered in practice._
+
 ---
 
-[Home](Readme.md)
+[Home](Readme.md#top)

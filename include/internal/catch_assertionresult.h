@@ -9,44 +9,32 @@
 #define TWOBLUECUBES_CATCH_ASSERTIONRESULT_H_INCLUDED
 
 #include <string>
+#include "catch_assertioninfo.h"
 #include "catch_result_type.h"
+#include "catch_common.h"
+#include "catch_stringref.h"
+#include "catch_assertionhandler.h"
 
 namespace Catch {
 
-    struct AssertionInfo
-    {
-        AssertionInfo() {}
-        AssertionInfo(  std::string const& _macroName,
-                        SourceLineInfo const& _lineInfo,
-                        std::string const& _capturedExpression,
-                        ResultDisposition::Flags _resultDisposition );
-
-        std::string macroName;
-        SourceLineInfo lineInfo;
-        std::string capturedExpression;
-        ResultDisposition::Flags resultDisposition;
-    };
-
     struct AssertionResultData
     {
-        AssertionResultData() : resultType( ResultWas::Unknown ) {}
+        AssertionResultData() = delete;
 
-        std::string reconstructedExpression;
+        AssertionResultData( ResultWas::OfType _resultType, LazyExpression const& _lazyExpression );
+
         std::string message;
+        mutable std::string reconstructedExpression;
+        LazyExpression lazyExpression;
         ResultWas::OfType resultType;
+
+        std::string reconstructExpression() const;
     };
 
     class AssertionResult {
     public:
-        AssertionResult();
+        AssertionResult() = delete;
         AssertionResult( AssertionInfo const& info, AssertionResultData const& data );
-        ~AssertionResult();
-#  ifdef CATCH_CONFIG_CPP11_GENERATED_METHODS
-         AssertionResult( AssertionResult const& )              = default;
-         AssertionResult( AssertionResult && )                  = default;
-         AssertionResult& operator = ( AssertionResult const& ) = default;
-         AssertionResult& operator = ( AssertionResult && )     = default;
-#  endif
 
         bool isOk() const;
         bool succeeded() const;
@@ -59,9 +47,9 @@ namespace Catch {
         std::string getExpandedExpression() const;
         std::string getMessage() const;
         SourceLineInfo getSourceInfo() const;
-        std::string getTestMacroName() const;
+        StringRef getTestMacroName() const;
 
-    protected:
+    //protected:
         AssertionInfo m_info;
         AssertionResultData m_resultData;
     };

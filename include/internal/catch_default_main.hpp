@@ -8,10 +8,18 @@
 #ifndef TWOBLUECUBES_CATCH_DEFAULT_MAIN_HPP_INCLUDED
 #define TWOBLUECUBES_CATCH_DEFAULT_MAIN_HPP_INCLUDED
 
+#include "catch_session.h"
+
 #ifndef __OBJC__
 
+#if defined(CATCH_CONFIG_WCHAR) && defined(WIN32) && defined(_UNICODE) && !defined(DO_NOT_USE_WMAIN)
+// Standard C/C++ Win32 Unicode wmain entry point
+extern "C" int wmain (int argc, wchar_t * argv[], wchar_t * []) {
+#else
 // Standard C/C++ main entry point
 int main (int argc, char * argv[]) {
+#endif
+
     return Catch::Session().run( argc, argv );
 }
 
@@ -24,7 +32,7 @@ int main (int argc, char * const argv[]) {
 #endif
 
     Catch::registerTestMethods();
-    int result = Catch::Session().run( argc, (char* const*)argv );
+    int result = Catch::Session().run( argc, (char**)argv );
 
 #if !CATCH_ARC_ENABLED
     [pool drain];

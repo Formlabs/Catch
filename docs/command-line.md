@@ -1,5 +1,33 @@
+<a id="top"></a>
+# Command line
+
+**Contents**<br>
+[Specifying which tests to run](#specifying-which-tests-to-run)<br>
+[Choosing a reporter to use](#choosing-a-reporter-to-use)<br>
+[Breaking into the debugger](#breaking-into-the-debugger)<br>
+[Showing results for successful tests](#showing-results-for-successful-tests)<br>
+[Aborting after a certain number of failures](#aborting-after-a-certain-number-of-failures)<br>
+[Listing available tests, tags or reporters](#listing-available-tests-tags-or-reporters)<br>
+[Sending output to a file](#sending-output-to-a-file)<br>
+[Naming a test run](#naming-a-test-run)<br>
+[Eliding assertions expected to throw](#eliding-assertions-expected-to-throw)<br>
+[Make whitespace visible](#make-whitespace-visible)<br>
+[Warnings](#warnings)<br>
+[Reporting timings](#reporting-timings)<br>
+[Load test names to run from a file](#load-test-names-to-run-from-a-file)<br>
+[Just test names](#just-test-names)<br>
+[Specify the order test cases are run](#specify-the-order-test-cases-are-run)<br>
+[Specify a seed for the Random Number Generator](#specify-a-seed-for-the-random-number-generator)<br>
+[Identify framework and version according to the libIdentify standard](#identify-framework-and-version-according-to-the-libidentify-standard)<br>
+[Wait for key before continuing](#wait-for-key-before-continuing)<br>
+[Specify multiples of clock resolution to run benchmarks for](#specify-multiples-of-clock-resolution-to-run-benchmarks-for)<br>
+[Usage](#usage)<br>
+[Specify the section to run](#specify-the-section-to-run)<br>
+[Filenames as tags](#filenames-as-tags)<br>
+[Override output colouring](#override-output-colouring)<br>
+
 Catch works quite nicely without any command line options at all - but for those times when you want greater control the following options are available.
-Click one of the followings links to take you straight to that option - or scroll on to browse the available options.
+Click one of the following links to take you straight to that option - or scroll on to browse the available options.
 
 <a href="#specifying-which-tests-to-run">               `    <test-spec> ...`</a><br />
 <a href="#usage">                                       `    -h, -?, --help`</a><br />
@@ -17,6 +45,9 @@ Click one of the followings links to take you straight to that option - or scrol
 <a href="#warnings">                                    `    -w, --warn`</a><br />
 <a href="#reporting-timings">                           `    -d, --durations`</a><br />
 <a href="#input-file">                                  `    -f, --input-file`</a><br />
+<a href="#run-section">                                 `    -c, --section`</a><br />
+<a href="#filenames-as-tags">                           `    -#, --filenames-as-tags`</a><br />
+
 
 </br>
 
@@ -24,6 +55,10 @@ Click one of the followings links to take you straight to that option - or scrol
 <a href="#listing-available-tests-tags-or-reporters">   `    --list-reporters`</a><br />
 <a href="#order">                                       `    --order`</a><br />
 <a href="#rng-seed">                                    `    --rng-seed`</a><br />
+<a href="#libidentify">                                 `    --libidentify`</a><br />
+<a href="#wait-for-keypress">                           `    --wait-for-keypress`</a><br />
+<a href="#benchmark-resolution-multiple">               `    --benchmark-resolution-multiple`</a><br />
+<a href="#use-colour">                                  `    --use-colour`</a><br />
 
 </br>
 
@@ -45,7 +80,7 @@ Wildcards consist of the `*` character at the beginning and/or end of test case 
 
 Test specs are case insensitive.
 
-If a spec is prefixed with `exclude:` or the `~` character then the pattern matches an exclusion. This means that tests matching the pattern are excluded from the set - even if a prior inclusion spec included them. Subsequent inclusion specs will take precendence, however.
+If a spec is prefixed with `exclude:` or the `~` character then the pattern matches an exclusion. This means that tests matching the pattern are excluded from the set - even if a prior inclusion spec included them. Subsequent inclusion specs will take precedence, however.
 Inclusions and exclusions are evaluated in left-to-right order.
 
 Test case examples:
@@ -61,11 +96,13 @@ a* ~ab* abc             Matches all tests that start with 'a', except those that
 </pre>
 
 Names within square brackets are interpreted as tags.
-A series of tags form an AND expression wheras a comma-separated sequence forms an OR expression. e.g.:
+A series of tags form an AND expression whereas a comma-separated sequence forms an OR expression. e.g.:
 
 <pre>[one][two],[three]</pre>
 This matches all tests tagged `[one]` and `[two]`, as well as all tests tagged `[three]`
 
+Test names containing special characters, such as `,` or `[` can specify them on the command line using `\`.
+`\` also escapes itself.
 
 <a id="choosing-a-reporter-to-use"></a>
 ## Choosing a reporter to use
@@ -87,8 +124,9 @@ The JUnit reporter is an xml format that follows the structure of the JUnit XML 
 ## Breaking into the debugger
 <pre>-b, --break</pre>
 
-In some IDEs (currently XCode and Visual Studio) it is possible for Catch to break into the debugger on a test failure. This can be very helpful during debug sessions - especially when there is more than one path through a particular test.
-In addition to the command line option, ensure you have built your code with the DEBUG preprocessor symbol
+Under most debuggers Catch2 is capable of automatically breaking on a test
+failure. This allows the user to see the current state of the test during
+failure.
 
 <a id="showing-results-for-successful-tests"></a>
 ## Showing results for successful tests
@@ -115,7 +153,7 @@ Sometimes this results in a flood of failure messages and you'd rather just see 
 --list-reporters
 </pre>
 
-```-l``` or ```--list-tests`` will list all registered tests, along with any tags.
+```-l``` or ```--list-tests``` will list all registered tests, along with any tags.
 If one or more test-specs have been supplied too then only the matching tests will be listed.
 
 ```-t``` or ```--list-tags``` lists all available tags, along with the number of test cases they match. Again, supplying test specs limits the tags that match.
@@ -158,9 +196,16 @@ This option transforms tabs and newline characters into ```\t``` and ```\n``` re
 ## Warnings
 <pre>-w, --warn &lt;warning name></pre>
 
-Enables reporting of warnings (only one, at time of this writing). If a warning is issued it fails the test.
+Enables reporting of suspicious test states. There are currently two
+available warnings
 
-The ony available warning, presently, is ```NoAssertions```. This warning fails a test case, or (leaf) section if no assertions (```REQUIRE```/ ```CHECK``` etc) are encountered.
+```
+    NoAssertions   // Fail test case / leaf section if no assertions
+                   // (e.g. `REQUIRE`) is encountered.
+    NoTests        // Return non-zero exit code when no test cases were run
+                   // Also calls reporter's noMatchingTestCases method
+```
+
 
 <a id="reporting-timings"></a>
 ## Reporting timings
@@ -209,12 +254,96 @@ Alternatively if the keyword ```time``` is provided then the result of calling `
 
 In either case the actual value for the seed is printed as part of Catch's output so if an issue is discovered that is sensitive to test ordering the ordering can be reproduced - even if it was originally seeded from ```std::time(0)```.
 
+<a id="libidentify"></a>
+## Identify framework and version according to the libIdentify standard
+<pre>--libidentify</pre>
+
+See [The LibIdentify repo for more information and examples](https://github.com/janwilmans/LibIdentify).
+
+<a id="wait-for-keypress"></a>
+## Wait for key before continuing
+<pre>--wait-for-keypress &lt;start|exit|both&gt;</pre>
+
+Will cause the executable to print a message and wait until the return/ enter key is pressed before continuing -
+either before running any tests, after running all tests - or both, depending on the argument.
+
+<a id="benchmark-resolution-multiple"></a>
+## Specify multiples of clock resolution to run benchmarks for
+<pre>--benchmark-resolution-multiple &lt;multiplier&gt;</pre>
+
+When running benchmarks the clock resolution is estimated. Benchmarks are then run for exponentially increasing
+numbers of iterations until some multiple of the estimated resolution is exceed. By default that multiple is 100, but 
+it can be overridden here.
+
 <a id="usage"></a>
 ## Usage
 <pre>-h, -?, --help</pre>
 
 Prints the command line arguments to stdout
 
+
+<a id="run-section"></a>
+## Specify the section to run
+<pre>-c, --section &lt;section name&gt;</pre>
+
+To limit execution to a specific section within a test case, use this option one or more times.
+To narrow to sub-sections use multiple instances, where each subsequent instance specifies a deeper nesting level.
+
+E.g. if you have:
+
+<pre>
+TEST_CASE( "Test" ) {
+  SECTION( "sa" ) {
+    SECTION( "sb" ) {
+      /*...*/
+    }
+    SECTION( "sc" ) {
+      /*...*/
+    }
+  }
+  SECTION( "sd" ) {
+    /*...*/
+  }
+}
+</pre>
+
+Then you can run `sb` with:
+<pre>./MyExe Test -c sa -c sb</pre>
+
+Or run just `sd` with:
+<pre>./MyExe Test -c sd</pre>
+
+To run all of `sa`, including `sb` and `sc` use:
+<pre>./MyExe Test -c sa</pre>
+
+There are some limitations of this feature to be aware of:
+- Code outside of sections being skipped will still be executed - e.g. any set-up code in the TEST_CASE before the
+start of the first section.</br>
+- At time of writing, wildcards are not supported in section names.
+- If you specify a section without narrowing to a test case first then all test cases will be executed 
+(but only matching sections within them).
+
+
+<a id="filenames-as-tags"></a>
+## Filenames as tags
+<pre>-#, --filenames-as-tags</pre>
+
+When this option is used then every test is given an additional tag which is formed of the unqualified 
+filename it is found in, with any extension stripped, prefixed with the `#` character.
+
+So, for example,  tests within the file `~\Dev\MyProject\Ferrets.cpp` would be tagged `[#Ferrets]`.
+
+<a id="use-colour"></a>
+## Override output colouring
+<pre>--use-colour &lt;yes|no|auto&gt;</pre>
+
+Catch colours output for terminals, but omits colouring when it detects that
+output is being sent to a pipe. This is done to avoid interfering with automated
+processing of output.
+
+`--use-colour yes` forces coloured output, `--use-colour no` disables coloured
+output. The default behaviour is `--use-colour auto`.
+
 ---
 
-[Home](Readme.md)
+[Home](Readme.md#top)

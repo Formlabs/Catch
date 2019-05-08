@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A5C29AA1F715603007CB94C /* catch_objc_impl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C29A91F715603007CB94C /* catch_objc_impl.mm */; };
 		4A63D2AC14E3C1A900F615CB /* OCTest.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4A63D2AB14E3C1A900F615CB /* OCTest.1 */; };
 		4A63D2B314E3C1E600F615CB /* Main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A63D2B214E3C1E600F615CB /* Main.mm */; };
 		4A63D2C014E4544700F615CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A63D2BF14E4544700F615CB /* Foundation.framework */; };
@@ -29,6 +30,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A5C29A91F715603007CB94C /* catch_objc_impl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = catch_objc_impl.mm; sourceTree = "<group>"; };
 		4A63D2A514E3C1A900F615CB /* OCTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OCTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A63D2AB14E3C1A900F615CB /* OCTest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = OCTest.1; sourceTree = "<group>"; };
 		4A63D2B214E3C1E600F615CB /* Main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Main.mm; sourceTree = "<group>"; };
@@ -38,9 +40,6 @@
 		4A63D2C314E454CC00F615CB /* OCTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OCTest.mm; sourceTree = "<group>"; };
 		4A63D2C414E454CC00F615CB /* TestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObj.h; sourceTree = "<group>"; };
 		4A63D2C514E454CC00F615CB /* TestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObj.m; sourceTree = "<group>"; };
-		4AA0D951154C0A7A004B4193 /* catch_objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = catch_objc.hpp; path = ../../../include/internal/catch_objc.hpp; sourceTree = "<group>"; };
-		4ABEA80615C90E10009F0424 /* catch_objc_arc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = catch_objc_arc.hpp; path = ../../../include/internal/catch_objc_arc.hpp; sourceTree = "<group>"; };
-		4ABEA80815C90E38009F0424 /* catch_tostring.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = catch_tostring.hpp; path = ../../../include/internal/catch_tostring.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,9 +89,7 @@
 		4AA0D94F154C0A63004B4193 /* Catch */ = {
 			isa = PBXGroup;
 			children = (
-				4ABEA80815C90E38009F0424 /* catch_tostring.hpp */,
-				4ABEA80615C90E10009F0424 /* catch_objc_arc.hpp */,
-				4AA0D951154C0A7A004B4193 /* catch_objc.hpp */,
+				4A5C29A91F715603007CB94C /* catch_objc_impl.mm */,
 			);
 			name = Catch;
 			sourceTree = "<group>";
@@ -123,7 +120,7 @@
 		4A63D29C14E3C1A900F615CB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0940;
 			};
 			buildConfigurationList = 4A63D29F14E3C1A900F615CB /* Build configuration list for PBXProject "OCTest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -148,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A63D2B314E3C1E600F615CB /* Main.mm in Sources */,
+				4A5C29AA1F715603007CB94C /* catch_objc_impl.mm in Sources */,
 				4A63D2C614E454CC00F615CB /* CatchOCTestCase.mm in Sources */,
 				4A63D2C714E454CC00F615CB /* OCTest.mm in Sources */,
 				4A63D2C814E454CC00F615CB /* TestObj.m in Sources */,
@@ -161,16 +159,30 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -196,16 +208,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -223,6 +248,8 @@
 		4A63D2B014E3C1A900F615CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				HEADER_SEARCH_PATHS = ../../../include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -232,6 +259,8 @@
 		4A63D2B114E3C1A900F615CB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				HEADER_SEARCH_PATHS = ../../../include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
