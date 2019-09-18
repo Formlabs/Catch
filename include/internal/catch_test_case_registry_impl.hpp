@@ -41,7 +41,7 @@ namespace Catch {
                     seedRng( config );
 
                     RandomNumberGenerator rng;
-                    std::random_shuffle( sorted.begin(), sorted.end(), rng );
+                    std::shuffle( sorted.begin(), sorted.end(), rng );
                 }
                 break;
             case RunTests::InDeclarationOrder:

@@ -151,7 +151,7 @@ namespace Catch {
         }
         ConfigData m_data;
 
-        std::auto_ptr<IStream const> m_stream;
+        std::unique_ptr<IStream const> m_stream;
         TestSpec m_testSpec;
     };
 

@@ -165,17 +165,17 @@
 // Visual C++
 #ifdef _MSC_VER
 
-#if (_MSC_VER >= 1600)
-#   define CATCH_INTERNAL_CONFIG_CPP11_NULLPTR
-#   define CATCH_INTERNAL_CONFIG_CPP11_UNIQUE_PTR
-#endif
-
 #if (_MSC_VER >= 1900 ) // (VC++ 13 (VS2015))
 #define CATCH_INTERNAL_CONFIG_CPP11_NOEXCEPT
 #define CATCH_INTERNAL_CONFIG_CPP11_GENERATED_METHODS
 #endif
 
 #endif // _MSC_VER
+
+
+// Aways use unique_ptr:
+#define CATCH_INTERNAL_CONFIG_CPP11_NULLPTR
+#define CATCH_INTERNAL_CONFIG_CPP11_UNIQUE_PTR
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -3450,7 +3450,7 @@ namespace Catch {
     };
 
     class DebugOutStream : public IStream {
-        std::auto_ptr<StreamBufBase> m_streamBuf;
+        std::unique_ptr<StreamBufBase> m_streamBuf;
         mutable std::ostream m_os;
     public:
         DebugOutStream();
@@ -3598,7 +3598,7 @@ namespace Catch {
         }
         ConfigData m_data;
 
-        std::auto_ptr<IStream const> m_stream;
+        std::unique_ptr<IStream const> m_stream;
         TestSpec m_testSpec;
     };
 
@@ -3837,17 +3837,16 @@ namespace Tbc {
 // Visual C++
 #ifdef _MSC_VER
 
-#if (_MSC_VER >= 1600)
-#define CLARA_INTERNAL_CONFIG_CPP11_NULLPTR
-#define CLARA_INTERNAL_CONFIG_CPP11_UNIQUE_PTR
-#endif
-
 #if (_MSC_VER >= 1900 ) // (VC++ 13 (VS2015))
 #define CLARA_INTERNAL_CONFIG_CPP11_NOEXCEPT
 #define CLARA_INTERNAL_CONFIG_CPP11_GENERATED_METHODS
 #endif
 
 #endif // _MSC_VER
+
+#define CLARA_INTERNAL_CONFIG_CPP11_NULLPTR
+#define CLARA_INTERNAL_CONFIG_CPP11_UNIQUE_PTR
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // C++ language feature support
@@ -6438,15 +6437,14 @@ namespace Catch {
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <random>
 
 namespace Catch {
 
     struct LexSort {
         bool operator() (TestCase i,TestCase j) const { return (i<j);}
     };
-    struct RandomNumberGenerator {
-        std::ptrdiff_t operator()( std::ptrdiff_t n ) const { return (std::ptrdiff_t)(std::rand() % n); }
-    };
+    using RandomNumberGenerator = std::default_random_engine;
 
     inline std::vector<TestCase> sortTests( IConfig const& config, std::vector<TestCase> const& unsortedTestCases ) {
 
@@ -6461,7 +6459,7 @@ namespace Catch {
                     seedRng( config );
 
                     RandomNumberGenerator rng;
-                    std::random_shuffle( sorted.begin(), sorted.end(), rng );
+                    std::shuffle( sorted.begin(), sorted.end(), rng );
                 }
                 break;
             case RunTests::InDeclarationOrder:
