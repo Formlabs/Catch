@@ -239,7 +239,7 @@
 #ifdef CATCH_CONFIG_CPP11_UNIQUE_PTR
 #   define CATCH_AUTO_PTR( T ) std::unique_ptr<T>
 #else
-#   define CATCH_AUTO_PTR( T ) std::auto_ptr<T>
+#   define CATCH_AUTO_PTR( T ) std::unique_ptr<T>
 #endif
 
 #endif // TWOBLUECUBES_CATCH_COMPILER_CAPABILITIES_HPP_INCLUDED
